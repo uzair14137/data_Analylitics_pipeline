@@ -14,16 +14,15 @@ flowchart TD
 
   profiles & posts & follows -->|batch 10 s| SparkSS
   SparkSS -->|"upserts\nParquet + Manifests"| MinIO[(MinIO\ns3a://sociallake)]
-  SparkSS -.->|edges| Janus[(JanusGraph 1.1\nGremlin API)]
-  SparkSS -->|"metrics\n(view materialized)"| ClickHouse[(ClickHouse\nlow-latency API)]
+
+
 
   Airflow["Airflow 2.8\nDAGs"] -->|schedule & retry| SparkSS
 
   %% ===========  Serving & BI =============
   Trino["Trino 448"] --> MinIO
   Superset["Apache Superset\n(BI dashboards)"] --> Trino
-  API["FastAPI\n/graph/reco"] --> Janus
-  API --> ClickHouse
+ 
 ```
   %% ===========  Styles (no commas!) ===========
   classDef spark fill:#FECACA stroke:#B91C1C color:#111
